@@ -1,0 +1,39 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+.pageBackground{
+    width: 100vw;
+    height: 100vh;
+    background-color: gray;
+}
+
+.scoreLabel{
+    font-size: 1.3rem;
+}
+
+.largeButton{
+    font-size: 1.3rem;
+}
+
+.container{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.gameInfoContainer{
+    display: flex;
+    flex-direction: column;
+    margin-top: 2vh;
+    align-items: flex-start;
+    
+}
+
+#canvas1 {
+    margin-top: 2vh;
+    margin-left: 1rem;
+    background-color: rgb(15, 15, 15);
+
+}
