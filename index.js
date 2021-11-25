@@ -2,10 +2,14 @@ import SnakeInfo from './Classes/SnakeInfo.js';
 import Square from './Classes/Square.js';
 
 const canvas = document.getElementById('canvas1');
-var context = canvas.getContext('2d');
-const gridRowLength = 35;
+const context = canvas.getContext('2d');
+const gridRowLength = 35; //sets the number of squares in each row for the game
 const numSquares = gridRowLength*gridRowLength;
-var canvasDimension = floorByNum((window.innerWidth <= window.innerHeight)? (window.innerWidth - (window.innerWidth*.09)) : (window.innerHeight - (window.innerHeight*.09)), gridRowLength);
+
+//desiredDimension is 90% of the smaller dimension (width or height);
+const desiredDimension = (window.innerWidth <= window.innerHeight)? (window.innerWidth - (window.innerWidth*.09)) : (window.innerHeight - (window.innerHeight*.09));
+//canvasDimension is the width and height in pixels for our snake game canvas
+let canvasDimension = floorByNum(desiredDimension, gridRowLength);//This operation makes sure that the game squares will perfectly fit the canvas size
 canvas.width = canvasDimension;
 canvas.height = canvasDimension;
 const newGameButton = document.getElementById('newGameButton');
@@ -20,6 +24,7 @@ gameInfoArea.appendChild(highScoreLabel);
 let squaresList = [];
 let snakeList;
 let snakeDirection;
+let previousDirection;
 let oldHeadIndex;
 let nextHeadIndex;
 let isGameOver;
@@ -53,11 +58,12 @@ function init() {
     }
     
     snakeDirection = 'right';
+    previousDirection = 'right';
     isGameOver = false;
     then = Date.now();
     speed = 10;
     spawnCounter = 0;
-    spawnInterval = 3;
+    spawnInterval = 3; //This ensures that the player can always eat three fruit before any deadly walls spawn
     scoreCount = 0;
     scoreLabel.textContent = `Score: ${scoreCount}`;
 
@@ -67,7 +73,6 @@ function init() {
     });
 
     spawnFruit();
-
     drawAll();
     update();
 }
@@ -109,6 +114,7 @@ function drawAll(){
 //Returns true if the snake is about to hit something that could kill it
 function checkCollision(){
     //Where the snake head is going
+    previousDirection = snakeDirection;
 
     switch(snakeDirection){
         case 'up': nextHeadIndex = oldHeadIndex-gridRowLength;
@@ -122,7 +128,6 @@ function checkCollision(){
     }
 
     let outOfBounds = false;
-
     if(nextHeadIndex < 0){
         //Out of bounds TOP
         outOfBounds = true;
@@ -141,6 +146,7 @@ function checkCollision(){
         let nextSquareOccupant = squaresList[nextHeadIndex].getOccupant();
 
         if((nextSquareOccupant) && nextSquareOccupant !== 'fruit'){
+            console.log(`Game Over: ${nextSquareOccupant}, at ${nextHeadIndex} square`);
             gameOver();
         }else if(squaresList[nextHeadIndex].getOccupant() === 'fruit'){
             scoreFruit(squaresList[nextHeadIndex]);
@@ -252,35 +258,37 @@ function moveHead(isGrowing){
         squaresList[nextHeadIndex].startAnimation('fruitConsumed');
     }
 
-    //This is what moves the snake's head forward
+    //This is what moves the snake's head move forward
     squaresList[nextHeadIndex].setOccupant('head');
 }
 
 //Get User Movement Input
 window.addEventListener('keydown', (event) => {
     const eventCode = event.code;
+    //We need the previous direction checks because rapid user input can 'trick' the snake into trying to move backwards into its own tail.
+    //This causes the player to lose the game. I would like to prevent the user from losing in this way, and instead ignore the self-destructive inputs
     switch(eventCode){
         case 'ArrowLeft': 
             event.preventDefault();
-            if (snakeDirection != 'right'){
+            if (snakeDirection != 'right' && previousDirection != 'right'){
                 snakeDirection = 'left';
             }
             break;
         case 'ArrowRight': 
             event.preventDefault();
-            if (snakeDirection != 'left'){
+            if (snakeDirection != 'left' && previousDirection != 'left'){
                 snakeDirection = 'right';
             }
             break;
         case 'ArrowUp' : 
             event.preventDefault();
-            if (snakeDirection != 'down'){
+            if (snakeDirection != 'down' && previousDirection != 'down'){
                 snakeDirection = 'up';
             }
             break;
         case 'ArrowDown' : 
             event.preventDefault();
-            if (snakeDirection != 'up'){
+            if (snakeDirection != 'up' && previousDirection != 'up'){
                 snakeDirection = 'down';
             }
             break;
@@ -294,13 +302,21 @@ window.addEventListener('keydown', (event) => {
 });
 
 newGameButton.addEventListener('click', (ev)=>{
+    //Simply starts a new game when the user clicks the button. But not if there is an ongoing game.
     if(isGameOver){
         init();
     }
 });
 
-//Utility Functions
+//Begin the game once the script has finished loading
+init();
+
+//----Utility Functions----
 function floorByNum(x, floorVal){
+    //returns the largest integer multiple of the floorVal that can fit into x;
+    //example: let x = 100. let floorVal = 22
+    //the function would return the value of 88
+    //In other words, we can't let the value go over x, but we want it as close as possible to x while still being an integer multiple of floorVal
     return Math.floor(x/floorVal)*floorVal;
 }
 
@@ -309,5 +325,3 @@ function randIntBetween(min, max){
     max = Math.floor(max);
     return Math.floor(Math.random()*(max-min+1)) + min;
 }
-
-init();
