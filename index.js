@@ -1,3 +1,4 @@
+//Including the custom classes
 import SnakeInfo from './Classes/SnakeInfo.js';
 import Square from './Classes/Square.js';
 
@@ -100,12 +101,16 @@ function updateHeadIndex(){
 
 function drawAll(){
     let animationSquares = [];
+
+    //Draw each square
     squaresList.forEach((square) =>{
         square.drawSelf();
         if(square.isAnimating()){
+            //If the square has an animation to play, add it to this array
             animationSquares.push(square);
         }
     });
+    //Draw the animation for each animating square as determined above
     animationSquares.forEach((square) =>{
         square.drawAnimation();
     });
@@ -116,6 +121,9 @@ function checkCollision(){
     //Where the snake head is going
     previousDirection = snakeDirection;
 
+    //find the square that the snake is trying to move to. 
+    //This isn't as simple as current square +1 due to the way the grid of squares is laid out.
+    //Vertical movement jumps by whatever the length of the row is
     switch(snakeDirection){
         case 'up': nextHeadIndex = oldHeadIndex-gridRowLength;
             break;
@@ -143,12 +151,14 @@ function checkCollision(){
     }
 
     if(!outOfBounds){
+        //Check what is in the next square
         let nextSquareOccupant = squaresList[nextHeadIndex].getOccupant();
 
         if((nextSquareOccupant) && nextSquareOccupant !== 'fruit'){
-            console.log(`Game Over: ${nextSquareOccupant}, at ${nextHeadIndex} square`);
+            //if they hit a wall, game over
             gameOver();
         }else if(squaresList[nextHeadIndex].getOccupant() === 'fruit'){
+            //if they ate a fruit, update the score, grow the tail, move the player, and spawn a new fruit/wall
             scoreFruit(squaresList[nextHeadIndex]);
             moveHead(true);
             spawnFruit();
@@ -159,15 +169,17 @@ function checkCollision(){
             }
             spawnCounter++;
         }else{
-            moveHead(false);
+            moveHead(false);//Move the player without growing the tail
         }
     }
     else{
+        //if the player hit the edge of the screen, game over
         gameOver();
     }
 
 }
 
+//returns the correct pixel size for the given text message, area, and margin
 function getFittedFontSize(startFontSize, text, screenWidth, xMargin){
     let desiredSize = startFontSize;
     context.font = `${desiredSize}px serif`;
@@ -178,11 +190,13 @@ function getFittedFontSize(startFontSize, text, screenWidth, xMargin){
 }
 
 function gameOver(){
+    //set the font size to fit the canvas size
     const margin = canvas.width * .05;
     const yPos = canvas.height * .5;
     const largeFont = getFittedFontSize(300, "Game Over", canvas.width, margin);
     const smallFont = largeFont * .5;
 
+    //draw the Game Over and Score messages
     context.fillStyle = 'red';
     context.font = `${largeFont}px serif`;
     context.fillText('Game Over', margin, yPos);
@@ -199,9 +213,9 @@ function gameOver(){
         highScore = scoreCount;
     }
     
+    //update the scores on the sideboard
     scoreLabel.textContent = `Score: ${scoreCount}`;
     highScoreLabel.textContent = `High Score: ${highScore}`;
-
 }
 
 function scoreFruit(fruitSquare){
@@ -212,10 +226,12 @@ function scoreFruit(fruitSquare){
 function spawnFruit(){
     let fruitIndex = randIntBetween(0, numSquares);
 
+    //find an empty square to spawn the fruit in
     while(squaresList[fruitIndex].getOccupant()){
         fruitIndex = randIntBetween(0, numSquares);
     }
 
+    //Use a random number to simulate the odds in order to determine which fruit will spawn
     let fruitValue = 1;
     let odds = randIntBetween(1, 100);
     if(odds < 70){
@@ -228,7 +244,10 @@ function spawnFruit(){
         fruitValue = 4;
     }
 
+    //increase the game speed
     speed+=.5;
+
+    //Actually place the fruit and begin the animation that plays when a new fruit is generated
     squaresList[fruitIndex].setFruitValue(fruitValue);
     squaresList[fruitIndex].startAnimation('fruitCreation');
 }
@@ -236,10 +255,12 @@ function spawnFruit(){
 function spawnWall(){
     let wallIndex = randIntBetween(0, numSquares);
 
+    //find an empty square to spawn a wall in
     while(squaresList[wallIndex].getOccupant()){
         wallIndex = randIntBetween(0, numSquares);
     }
 
+    //Actually place the wall in the world
     squaresList[wallIndex].setOccupant('wall');
 }
 
@@ -320,6 +341,7 @@ function floorByNum(x, floorVal){
     return Math.floor(x/floorVal)*floorVal;
 }
 
+//return an integer value between the min and maximum values
 function randIntBetween(min, max){
     min = Math.ceil(min);
     max = Math.floor(max);
