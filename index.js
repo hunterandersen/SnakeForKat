@@ -19,8 +19,7 @@ gameInfoArea.appendChild(highScoreLabel);
 
 let squaresList = [];
 let snakeList;
-let snakeDirectionCurrent;
-let snakeDirectionFuture;
+let snakeDirection;
 let oldHeadIndex;
 let nextHeadIndex;
 let isGameOver;
@@ -53,8 +52,7 @@ function init() {
         }
     }
     
-    snakeDirectionCurrent = 'right';
-    snakeDirectionFuture = 'right';
+    snakeDirection = 'right';
     isGameOver = false;
     then = Date.now();
     speed = 10;
@@ -111,9 +109,8 @@ function drawAll(){
 //Returns true if the snake is about to hit something that could kill it
 function checkCollision(){
     //Where the snake head is going
-    snakeDirectionCurrent = snakeDirectionFuture;
 
-    switch(snakeDirectionCurrent){
+    switch(snakeDirection){
         case 'up': nextHeadIndex = oldHeadIndex-gridRowLength;
             break;
         case 'down': nextHeadIndex = oldHeadIndex+gridRowLength;
@@ -144,7 +141,6 @@ function checkCollision(){
         let nextSquareOccupant = squaresList[nextHeadIndex].getOccupant();
 
         if((nextSquareOccupant) && nextSquareOccupant !== 'fruit'){
-            //console.log(`${squaresList[nextHeadIndex].getOccupant()}`);
             gameOver();
         }else if(squaresList[nextHeadIndex].getOccupant() === 'fruit'){
             scoreFruit(squaresList[nextHeadIndex]);
@@ -152,12 +148,10 @@ function checkCollision(){
             spawnFruit();
             if (spawnCounter >= spawnInterval){
                 spawnWall();
-                spawnCounter = 0;
+                spawnCounter = -1;
                 spawnInterval = randIntBetween(1, 6);
             }
-            else{
-                spawnCounter++;
-            }
+            spawnCounter++;
         }else{
             moveHead(false);
         }
@@ -268,26 +262,26 @@ window.addEventListener('keydown', (event) => {
     switch(eventCode){
         case 'ArrowLeft': 
             event.preventDefault();
-            if (snakeDirectionCurrent != 'right'){
-                snakeDirectionFuture = 'left';
+            if (snakeDirection != 'right'){
+                snakeDirection = 'left';
             }
             break;
         case 'ArrowRight': 
             event.preventDefault();
-            if (snakeDirectionCurrent != 'left'){
-                snakeDirectionFuture = 'right';
+            if (snakeDirection != 'left'){
+                snakeDirection = 'right';
             }
             break;
         case 'ArrowUp' : 
             event.preventDefault();
-            if (snakeDirectionCurrent != 'down'){
-                snakeDirectionFuture = 'up';
+            if (snakeDirection != 'down'){
+                snakeDirection = 'up';
             }
             break;
         case 'ArrowDown' : 
             event.preventDefault();
-            if (snakeDirectionCurrent != 'up'){
-                snakeDirectionFuture = 'down';
+            if (snakeDirection != 'up'){
+                snakeDirection = 'down';
             }
             break;
         case 'Space' :
