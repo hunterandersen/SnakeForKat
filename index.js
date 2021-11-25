@@ -168,17 +168,31 @@ function checkCollision(){
 
 }
 
+function getFittedFontSize(startFontSize, text, screenWidth, xMargin){
+    let desiredSize = startFontSize;
+    context.font = `${desiredSize}px serif`;
+    while(context.measureText(text).width > screenWidth - (2*xMargin)){
+        context.font = `${--desiredSize}px serif`;
+    }
+    return desiredSize;
+}
+
 function gameOver(){
+    const margin = canvas.width * .05;
+    const yPos = canvas.height * .5;
+    const largeFont = getFittedFontSize(300, "Game Over", canvas.width, margin);
+    const smallFont = largeFont * .5;
+
     context.fillStyle = 'red';
-    context.font = '150px serif';
-    context.fillText('Game Over', (canvas.width*.1), canvas.height*.5);
+    context.font = `${largeFont}px serif`;
+    context.fillText('Game Over', margin, yPos);
     context.strokeStyle = 'white';
-    context.strokeText('Game Over', (canvas.width*.1), canvas.height*.5);
+    context.strokeText('Game Over', margin, yPos);
     context.fillStyle = 'blue';
-    context.font = '80px sans-serif';
-    context.fillText(`Score: ${scoreCount}`, (canvas.width*.1), canvas.height*.5 + 80);
+    context.font = `${largeFont*.5}px sans-serif`;
+    context.fillText(`Score: ${scoreCount}`, margin, yPos + smallFont);
     context.strokeStyle = 'white';
-    context.strokeText(`Score: ${scoreCount}`, (canvas.width*.1), canvas.height*.5 + 80);
+    context.strokeText(`Score: ${scoreCount}`, margin, yPos + smallFont);
     isGameOver = true;
 
     if(highScore < scoreCount){
