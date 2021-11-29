@@ -9,18 +9,14 @@ class ParticleEffect{
         this.context = drawingContext;
         this.animationLength = 0;
         this.animationCount = 0;
-        switch(this.effectType){
-            case 'circleShrinking':
-                this.radius = 40;
-                this.radiusSpeed = -10;
+        if (this.effectType == 'circleShrinking'){
+                this.radius = this.context.canvas.width*.05;
                 this.animationLength = 10;
-                break;
-            case 'boxticks':
-                this.animationLength = 5;
+                this.radiusSpeed = -1*(this.radius/this.animationLength)-1;
+        } else if (this.effectType == 'boxticks'){
+                this.animationLength = 16;
                 this.width = width;
-            case 'snaketrail':
-                this.animationLength = 10;
-                
+                this.hslValues = [0, 100, 50];
         }
     }
     update(){
@@ -31,8 +27,8 @@ class ParticleEffect{
                 if(this.radius < 0){
                     this.radius = 0;
                 }
-            } else if (this.effectType == 'boxticks'){
-                //This doesn't really "animate" so to say. Nothing changes it just hovers statically
+            } else if (this.effectType == 'boxticks' && this.animationCount%2==0){
+                this.hslValues[0] += 40;
             }
         }else{
             return false;
@@ -48,14 +44,12 @@ class ParticleEffect{
             this.context.stroke();
             this.context.closePath();
         }else if (this.effectType == 'boxticks'){
-            this.context.strokeStyle = 'white';
+            this.context.strokeStyle = `hsl(${this.hslValues[0]}, ${this.hslValues[1]}%, ${this.hslValues[2]}%)`;
             this.context.beginPath();
             this.context.lineWidth = 1.5;
             for(let i = 0; i <= 1; i+=.5){
                 for (let j = 0; j <= 1; j+=.5){
                     //the starting x - .5 gets the ending x
-                    /* this.context.moveTo(this.x + (this.width * i), this.y + (this.width * j));
-                    this.context.lineTo(this.x + (this.width * i) + (this.width * (i-.5)), this.y + (this.width * j) + (this.width * (j-.5))); */
                     this.context.moveTo(this.x + (this.width * i), this.y + (this.width * j));
                     this.context.lineTo(this.x + (this.width * i) + (this.width * (i-.5)), this.y + (this.width * j) + (this.width * (j-.5)));
                 }

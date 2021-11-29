@@ -69,7 +69,7 @@ function init() {
     scoreLabel.textContent = `Score: ${scoreCount}`;
 
     snakeList = [new SnakeInfo(gridRowLength+1, 'head')];
-    snakeList.forEach( (snake)=>{
+    snakeList.forEach( snake =>{
         squaresList[snake.getIndex()].setOccupant(snake.getOccupant());
     });
 
@@ -90,6 +90,7 @@ function update(){
         }
     }
     if (!isGameOver){
+        console.log(1000/speed);
         requestAnimationFrame(update);
     }
 }

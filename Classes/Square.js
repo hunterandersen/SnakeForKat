@@ -25,17 +25,35 @@ class Square{
 
     drawSelf(){
         switch(this.#occupant){
-            case 'head' : this.#context.fillStyle = 'orange';
+            case 'head' : 
+                this.#context.fillStyle = 'orange';
+                this.#context.fillRect(this.#xPos, this.#yPos, this.#width, this.#width);
                 break;
-            case 'tail' : this.#context.fillStyle = 'green';
+            case 'tail' : 
+                this.#context.fillStyle = 'green';
+                this.#context.fillRect(this.#xPos, this.#yPos, this.#width, this.#width);
                 break;
-            case 'fruit' : this.#context.fillStyle = this.#fruitColor;
+            case 'fruit' : 
+                this.#context.strokeStyle = 'black';
+                this.#context.strokeWidth = 1.5;
+                this.#context.strokeRect(this.#xPos, this.#yPos, this.#width, this.#width);
+                this.#context.strokeWidth = 1;
+                this.#context.fillStyle = this.#fruitColor;
+                this.#context.fillRect(this.#xPos, this.#yPos, this.#width, this.#width);
                 break;
-            case 'wall' : this.#context.fillStyle = 'red';
+            case 'wall' : 
+                this.#context.strokeStyle = 'black';
+                this.#context.strokeWidth = 2;
+                this.#context.strokeRect(this.#xPos, this.#yPos, this.#width, this.#width);
+                this.#context.strokeWidth = 1;
+                this.#context.fillStyle = 'red';
+                this.#context.fillRect(this.#xPos, this.#yPos, this.#width, this.#width);
                 break;
-            default: this.#context.fillStyle = 'rgb(15, 15, 15)';
+            default: 
+                this.#context.fillStyle = 'rgb(73, 73, 73)';
+                this.#context.fillRect(this.#xPos, this.#yPos, this.#width, this.#width);
         }
-        this.#context.fillRect(this.#xPos, this.#yPos, this.#width, this.#width);
+        
 
 
         //Uncomment to have the squares draw their grids and which position they are in the squaresList array
@@ -49,9 +67,8 @@ class Square{
     }
 
     drawAnimation(){
-
         if(this.#particleEffects && this.#particleEffects.length > 0){
-            this.#particleEffects = this.#particleEffects.filter((effect, index)=>{
+            this.#particleEffects = this.#particleEffects.filter( effect => {
                 if(effect.update()){
                     effect.draw();
                     return true;
@@ -62,8 +79,6 @@ class Square{
         }else{
             this.#isAnimating = false;
         }
-        
-        
     }
 
     isAnimating(){
