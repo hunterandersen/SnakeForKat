@@ -165,7 +165,7 @@ function checkCollision(){
             if (spawnCounter >= spawnInterval){
                 spawnWall();
                 spawnCounter = -1;
-                spawnInterval = randIntBetween(1, 6);
+                spawnInterval = randIntBetween(1, 7);
             }
             spawnCounter++;
         }else{
@@ -345,5 +345,24 @@ function floorByNum(x, floorVal){
 function randIntBetween(min, max){
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random()*(max-min+1)) + min;
+    return Math.floor(Math.random()*(max-min)) + min;
 }
+
+//Useful event listener for helping me find information
+//Allows me to 'pick' a square simply by hovering my mouse over it.
+/* window.addEventListener('mousemove', ev => {
+    //console.log(ev);
+    let boundingData = canvas.getBoundingClientRect();
+    if (ev.x > boundingData.x && ev.y > boundingData.y && ev.x < (boundingData.x + boundingData.width) && ev.y < (boundingData.y + boundingData.height)){
+        //mouse is within canvas area
+        let mouseX = ev.x - boundingData.x;
+        let mouseY = ev.y - boundingData.y;
+        let goodY = Math.floor(mouseY/(canvasDimension/gridRowLength));
+        let goodX = Math.floor(mouseX/(canvasDimension/gridRowLength));
+        let hoveredSquare = goodY*gridRowLength + goodX;
+
+        console.log(goodY*gridRowLength + goodX);
+        console.log(`${squaresList[hoveredSquare].getOccupant()}`);
+    }
+    
+}); */

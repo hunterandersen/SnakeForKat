@@ -38,8 +38,14 @@ class Square{
         this.#context.fillRect(this.#xPos, this.#yPos, this.#width, this.#width);
 
 
-        /* this.#gridContext.strokeStyle = 'white';
-        this.#gridContext.strokeRect(this.#xPos, this.#yPos, this.#width, this.#width); */
+        //Uncomment to have the squares draw their grids and which position they are in the squaresList array
+        /* this.#context.strokeStyle = 'teal';
+        this.#context.font = `12px serif`;
+        let myX = Math.floor(this.#xPos/this.#width);
+        let myY = Math.floor(this.#yPos/this.#width);
+        let thisSquareNumber = myY * 35 + myX;
+        this.#context.strokeText(`${thisSquareNumber}`, this.#xPos+2, this.#yPos+12);
+        this.#context.strokeRect(this.#xPos, this.#yPos, this.#width, this.#width); */
     }
 
     drawAnimation(){
