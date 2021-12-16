@@ -1,6 +1,6 @@
 //Including the custom classes
-import SnakeInfo from './Classes/SnakeInfo.js';
-import Square from './Classes/Square.js';
+import SnakeInfo from './src/client-side/Classes/SnakeInfo.js';
+import Square from './src/client-side/Classes/Square.js';
 
 const canvas = document.getElementById('canvas1');
 const context = canvas.getContext('2d');
