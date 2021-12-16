@@ -45,6 +45,14 @@ To get a local copy follow these simple example steps.
    ```sh
    npm install
    ```
+3. Start the server on localhost
+  ```sh
+  npm start
+  ```
+4. Open your browser to localhost and play Snake!
+  ```sh
+  http://localhost:3000
+  ```
 
 ### Hosted with Netlify
     ```
@@ -60,6 +68,7 @@ To get a local copy follow these simple example steps.
 I don't inted to continue working on this project much, beyond tinkering with simple color design. I'm not happy with the current color scheme.
 
 - [] Update the color scheme (background webpage/background of game canvas/player color)
+- [] Move the index.html/css/js files out of the root folder without breaking the hosting via Netlify
 - [] Update the graphics by adding images instead of drawing everything
 - [] Add a database backend to allow for persistent high scores
 - [] Add sound effects to enhance game experience
@@ -73,7 +82,6 @@ Distributed under the MIT License.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-
 <!-- CONTACT -->
 ## Contact
 
@@ -82,7 +90,6 @@ Hunter Andersen - andersen.hunter42@gmail.com
 [Project Link](https://github.com/hunterandersen/SnakeForKat)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- ACKNOWLEDGMENTS -->
