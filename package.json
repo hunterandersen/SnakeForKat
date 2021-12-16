@@ -4,8 +4,11 @@
   "description": "Snake Game using HTML CSS and Javascript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server/server.js"
   },
   "author": "Hunter Andersen",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }

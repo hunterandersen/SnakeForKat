@@ -90,7 +90,6 @@ function update(){
         }
     }
     if (!isGameOver){
-        console.log(1000/speed);
         requestAnimationFrame(update);
     }
 }
